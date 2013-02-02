@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="utf-8">
+        <title>Spindle.io</title>
+        <meta name="description" content="Spindle.io is the easiest way to connect with random strangers across the world.">
+        <meta name="viewport" content="width=device-width">
+            
+        <link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+        <script src="http://static.opentok.com/webrtc/v2.0/js/TB.min.js" type="text/javascript"></script>
+        <style type="text/css">
+            body { background-image: url('/bg.png'); font-family: sans-serif; }
+            div#container { width: 980px; margin: 0 auto; }
+            div#incompatible { background-color: rgba(217, 98, 98, .75); border-bottom: 1px solid #333; text-align: center; padding: 10px 0; color: #333; }
+
+            div#allow-cam .arrow_box {
+                margin-top: 9px;
+                margin-left: 285px;
+                color: rgb(255, 255, 255);
+                text-shadow: -0.05em -0.05em rgb(200, 200, 200);
+                font-family: 'Lobster', cursive;
+                font-size: 28px;
+                padding: 15px 10px;
+                position: fixed;
+                background: #82d55e;
+                width: 350px;
+                text-align: center;
+            }
+
+            div#allow-cam .arrow_box:after, .arrow_box:before {
+                bottom: 100%;
+                border: solid transparent;
+                content: " ";
+                height: 0;
+                width: 0;
+                position: absolute;
+                pointer-events: none;
+            }
+
+            div#allow-cam .arrow_box:after {
+                border-color: rgba(130, 213, 94, 0);
+                border-bottom-color: #82d55e;
+                border-width: 30px;
+                left: 50%;
+                margin-left: -30px;
+            }
+
+            .hidden { display: none; }
+    </style>
+    </head>
+    <body>
+        <div id="incompatible" class="top-bar hidden">Sorry your browser is currently not supported. Please download <a href="//google.com/chrome">Chrome</a> to use ChatToky</div>
+        <div id="allow-cam" class="top-bar hidden"><div class="arrow_box">Click allow to start chatting!</div></div>
+
+        <div id="container">
+            <h1>ChatToky</h1>
+            <video id="video" width="640" height="480" autoplay></video>
+        </div>
+
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+        <script type="text/javascript">
+          if ( !!(navigator.userAgent.match(/Chrome\/24|Chrome\/23/gi)) ) {
+            
+            $("div#allow-cam").hide().removeClass('hidden').show();
+          } else { $("div#incompatible").removeClass('hidden'); }
+
+          // Put event listeners into place
+          window.addEventListener("DOMContentLoaded", function() {
+            var video = document.getElementById("video"), videoObj = { "video": true };
+            navigator.webkitGetUserMedia(videoObj, function(stream){ 
+              
+              $("div#allow-cam").hide();
+              
+              // start streaming video to display
+              video.src = window.webkitURL.createObjectURL(stream); 
+              video.play();
+
+              var session_id = '';
+
+              // make request for session_id
+              $.ajax({
+                url: "/",
+                type: "POST",
+                data: { session_id: session_id },
+                dataType: 'json',
+                success: function(data){ 
+                    startNewSession(data['session_id'], data['token']); 
+                },
+                error: function() { alert("There has been an error.") }
+              });
+              
+            });
+          }, false);
+
+
+        function startNewSession (session_id, token) {
+            var apiKey = '22766332';
+            var session = TB.initSession(session_id);
+            
+            session.connect(apiKey, token);
+
+            session.addEventListener("sessionConnected", sessionConnectedHandler);
+            session.addEventListener("streamCreated", streamCreatedHandler);
+        }
+
+        function sessionConnectedHandler (event) {
+            subscribeToStreams(event.streams);
+            session.publish();
+        }
+
+        function subscribeToStreams (streams) {
+            for (i = 0; i < streams.length; i++) {
+                var stream = streams[i];
+                if (stream.connection.connectionId != session.connection.connectionId) {
+                    session.subscribe(stream);
+                }
+            }
+        }
+
+        </script>
+
+        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+        <script>
+            var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+</html>
