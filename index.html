@@ -1,134 +1,177 @@
 <!DOCTYPE html>
-    <head>
-        <meta charset="utf-8">
-        <title>Spindle.io</title>
-        <meta name="description" content="Spindle.io is the easiest way to connect with random strangers across the world.">
-        <meta name="viewport" content="width=device-width">
+<head>
+
+<title>Spindle.io</title>
+
+<meta charset="utf-8">
+<meta name="description" content="Spindle.io is the easiest way to connect with random people across the world.">
+<meta name="viewport" content="width=device-width">
+
+<link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Maven+Pro' rel='stylesheet' type='text/css'>
+
+<script type="text/javascript" src="//use.typekit.net/qpk6qlw.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){ }</script>
+<script src="http://static.opentok.com/webrtc/v2.0/js/TB.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="https://cdn.firebase.com/v0/firebase.js"></script>
+
+<style type="text/css">
         
-        <script type="text/javascript" src="//use.typekit.net/qpk6qlw.js"></script>
-        <script type="text/javascript">try{Typekit.load();}catch(e){ }</script>
-        <link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
-        <script src="http://static.opentok.com/webrtc/v2.0/js/TB.min.js" type="text/javascript"></script>
-        <style type="text/css">
-            body { background-image: url('bg.png'); font-family: sans-serif; width: 100%; height: 100%; margin: 0; padding: 0; }
-            div#background { width: 100%; height: 100%; position: absolute; background-color: rgba(0, 0, 0, .75); margin-top: -50px; padding-bottom: 15px; }
-            div#container { width: 980px; margin: 0 auto; }
-            div#incompatible { background-color: rgba(217, 98, 98, .75); border-bottom: 1px solid #333; text-align: center; padding: 10px 0; color: #333; }
-
-            h1 { font-size: 56px; }
+    body { background-color: rgb(240, 240, 240); font-family: sans-serif; width: 100%; height: 100%; margin: 0; padding: 0; }
             
-            div#allow-cam .arrow_box {
-                margin-top: -8px;
-                margin-left: 265px;
-                color: rgb(255, 255, 255);
-                text-shadow: -0.05em -0.05em rgb(200, 200, 200);
-                font-family: 'Lobster', cursive;
-                font-size: 34px;
-                padding: 15px 10px;
-                position: fixed;
-                background: #82d55e;
-                width: 350px;
-                text-align: center;
-            }
+    div#container { width: 980px; height: auto; margin: 0 auto; }
+    
+    div#video_row { width: 100%; height: auto; }
 
-            div#allow-cam .arrow_box:after, .arrow_box:before {
-                bottom: 100%;
-                border: solid transparent;
-                content: " ";
-                height: 0;
-                width: 0;
-                position: absolute;
-                pointer-events: none;
-            }
+    div.OT_video-container { width: 428px !important; height: 320px !important; margin-top: 0 !important; }
+    div.OT_video-container:first-child { }
+    div.OT_video-container:nth-child(2) { border-radius: 0px 0px 8px 0px; }
 
-            div#allow-cam .arrow_box:after {
-                border-color: rgba(130, 213, 94, 0);
-                border-bottom-color: #82d55e;
-                border-width: 30px;
-                left: 50%;
-                margin-left: -30px;
-            }
+    div#shit-container { height: auto; margin-top: 10px; border: 2px solid #666; background-color: rgb(255, 255, 255); }
 
-            .hidden { display: none; }
-    </style>
-    </head>
-    <body>
-        <div id="background"></div>
-        <div id="incompatible" class="top-bar hidden">Sorry your browser is currently not supported. Please download <a href="//google.com/chrome">Chrome</a> to use ChatToky</div>
-        <div id="allow-cam" class="top-bar hidden"><div class="arrow_box">Click allow to start chatting!</div></div>
+    div#incompatible { background-color: rgba(217, 98, 98, .75); border-bottom: 1px solid #333; text-align: center; padding: 10px 0; color: #333; }
 
-        <div id="container">
-            <h1 class="tk-museo-slab">Spindle.io</h1>
-            <video id="video" width="480" height="320" autoplay></video>
+    div#messagesDiv { overflow-y: scroll; float: left; height: 300px; width: 956px; padding: 10px; background-color: #fff; }
+
+    h1 { font-size: 56px; margin: 0 auto; text-align: center; padding-top: 5px;}
+
+    div#some-div { float: left; width: 428px !important; height: 320px !important; }
+    div#another-div { float: left; width: 428px !important; height: 320px !important; }
+
+    input { height: 40px; border: 0; border-top: 1px solid #333; width: 965px; font-size: 15px; padding-left: 10px; }
+
+    button#next-btn { float: left; height: 320px; width: 120px;  background: #AAA; color: #FFF; border: 0px; font-size: 20px;}
+    #next-btn:hover{ background: #888; color: #FFF;}
+    #next-btn:active{ background: #333; color: #FFF;}
+
+</style>
+</head>
+    
+<body>
+    <!-- -->
+    <!-- <div id="incompatible" class="top-bar hidden">Sorry your browser is currently not supported. Please download <a href="//google.com/chrome">Chrome</a> to use ChatToky</div>
+    <div id="allow-cam" class="top-bar hidden"><div class="arrow_box">Click allow to start chatting!</div></div> -->
+
+    <div id="container">
+        <h1 class="tk-museo-slab"><img src="/images/spindle.png" align="top"/>Spindle.io</h1>
+        
+        <div id="shit-container">
+            <div id="video-row">
+                <div id="some-div"></div>
+                <button id="next-btn" onclick="nextChat()">Next Round</button>
+                <div id="another-div"></div>                
+            </div>
+
+            <div id='messagesDiv'></div>
+            <input type='text' id='messageInput' placeholder='Message...'>
+            
         </div>
-
-
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-        <script type="text/javascript">
-          if ( !!(navigator.userAgent.match(/Chrome\/24|Chrome\/23/gi)) ) {
-            
+    </div>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script type="text/javascript">
+        if ( !!(navigator.userAgent.match(/Chrome\/24|Chrome\/23/gi)) ) {
             $("div#allow-cam").hide().removeClass('hidden').show();
-          } else { $("div#incompatible").removeClass('hidden'); }
+        } else { $("div#incompatible").removeClass('hidden'); }
 
-          // Put event listeners into place
-          window.addEventListener("DOMContentLoaded", function() {
-            var video = document.getElementById("video"), videoObj = { "video": true };
-            
-            navigator.webkitGetUserMedia(videoObj, function(stream){ 
-              
-              $("div#allow-cam").hide();
-              $("div#background").hide();
-              
-              // start streaming video to display
-              video.src = window.webkitURL.createObjectURL(stream); 
-              video.play();
+        var session;
+        var publisher;
+        var token;
+        var sessionID;
+        var apiKey = "22766332";
+        var store_streams = [];
 
-              var session_id = '';
+        publisher = TB.initPublisher(apiKey, 'some-div');
 
-              // make request for session_id
-              $.ajax({
-                url: "/",
-                type: "POST",
-                data: { session_id: session_id },
-                dataType: 'json',
-                success: function(data){ 
-                    var apiKey = "22766332";
-                    var sessionID = data['session_id'];
-                    var token = data['token'];
+        window.addEventListener("DOMContentLoaded", function() {
+            newChat();
+        });
 
-                    var session = TB.initSession(sessionID);
-                    session.addEventListener("sessionConnected", sessionConnectHandler);
-                    session.connect(apiKey, token);
+        function nextChat() {
+            session.disconnect();
+            newChat();
+        }
 
-                    function sessionConnectHandler(event) {
-                        for (var i = 0; i < event.streams.length; i++) {
-                            var stream = event.streams[i];
-                            displayStream(stream);
+        function newChat() {
+          $.ajax({
+            url: "/",
+            type: "POST",
+            dataType: 'json',
+            success: function(data){
+                token = data['token'];
+                sessionID = data['session_id'];
+
+                var messagesRef = new Firebase('https://chadhuber.firebaseio-demo.com/users/' + sessionID);
+
+                // Add a callback that is triggered for each chat message.
+                messagesRef.on('child_added', function (snapshot) {
+                    var message = snapshot.val();
+                    if ( !(message.token == token) ) { 
+                        $('<div/>').css('text-align', 'right').text(message.text).appendTo($('#messagesDiv'));
+                    } else {
+                        $('<div/>').css('text-align', 'left').text(message.text).appendTo($('#messagesDiv'));
+                    }
+                    $('#messagesDiv')[0].scrollTop = $('#messagesDiv')[0].scrollHeight;
+                });
+
+                // When the user presses enter on the message input, write the message to firebase
+                $('#messageInput').keypress(function (e) {
+                    if (e.keyCode == 13) {
+                        var text = $('#messageInput').val();
+                        messagesRef.push({text:text, token:token});
+                        $('#messageInput').val('');
+                    }
+                });
+
+                session = TB.initSession(sessionID);
+                
+                session.addEventListener("streamCreated", streamCreatedHandler);
+                session.addEventListener("sessionConnected", sessionConnectHandler);
+                session.addEventListener("streamDestroyed", streamDestroyedHandler);
+                session.addEventListener("sessionDisconnected", sessionDisconnectedHandler);
+                
+                TB.setLogLevel(TB.DEBUG);
+                session.connect(apiKey, token);
+
+                function sessionDisconnectedHandler(event) {
+                    event.preventDefault();
+                }
+
+                function streamCreatedHandler(event) {
+                    subscribeToStreams(event.streams);
+                }
+
+                function sessionConnectHandler(event) {
+                    session.publish(publisher);
+                    subscribeToStreams(event.streams);
+                }
+
+                function streamDestroyedHandler(event) {
+                    newChat();
+                }
+
+                function subscribeToStreams(streams) {
+                    for (i = 0; i < streams.length; i++) {
+                        var stream = streams[i];
+                         
+                        if (stream.connection.connectionId != session.connection.connectionId) {
+                            session.subscribe(stream, 'another-div');
                         }
                     }
+                }
 
-                    function displayStream(stream) {
-                        var div = document.createElement('div');
-                        div.setAttribute('id', 'stream' + stream.streamId);
-                        var streamsContainer = document.getElementById('streamsContainer');
-                        streamsContainer.appendChild(div);
-                        subscriber = session.subscribe(stream, 'stream' + stream.streamId);
-                    }
-                },
-                error: function() { alert("There has been an error.") }
-              });
-              
-            });
-          }, false);
+                $(window).on('beforeunload', function(){
+                    $.ajax({
+                        url: "/",
+                        type: "POST",
+                        data: { delete_session_id: window.sessionID }
+                    });
+                });
+            },
+            error: function() { alert("There has been an error.") }
+         
+          });
+        }
+    </script>
 
-        </script>
-
-        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
-        <script>
-            var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
-            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-            s.parentNode.insertBefore(g,s)}(document,'script'));
-        </script>
-    </body>
+</body>
 </html>
