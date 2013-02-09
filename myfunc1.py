@@ -1,3 +1,4 @@
+#!/bin/python
 
 def myfunc(mystr):
   print mystr
